@@ -1,7 +1,6 @@
-﻿using FluentValidationExample.Models;
-using FluentValidationExample.Validators;
+﻿using FluentValidation;
+using FluentValidationExample.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 
 namespace FluentValidationExample.Controllers
 {
@@ -9,20 +8,22 @@ namespace FluentValidationExample.Controllers
     [Route("[controller]")]
     public class RegistrationController : ControllerBase
     {
-        private readonly UserValidator validator;
+        private readonly IValidator<User> validator;
 
-        public RegistrationController()
+        public RegistrationController(IValidator<User> validator)
         {
-            validator = new UserValidator();
+            this.validator = validator;
         }
+
         [HttpPost]
         public IActionResult Register(User newUser)
         {
-            var validationResult = validator.Validate(newUser);
-            if (!validationResult.IsValid)
-            {
-                return BadRequest(validationResult.Errors.First().ErrorMessage);
-            }
+            //var validationResult = validator.Validate(newUser);
+
+            //if (!validationResult.IsValid)
+            //{
+            //    return BadRequest(validationResult.Errors.First().ErrorMessage);
+            //}
 
             return Ok();
         }
